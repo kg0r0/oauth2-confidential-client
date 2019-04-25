@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/kg0r0/oauth2-confidential-client/oauth2client"
 	"golang.org/x/oauth2"
 )
 
@@ -18,25 +19,31 @@ var ctx context.Context
 func init() {
 	tpl = template.Must(template.ParseGlob("templates/*"))
 	ctx = context.Background()
+	config, err := oauth2client.NewConfig("conf/config.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	conf = &oauth2.Config{
-		ClientID:     "YOUR_CLIENT_ID",
-		ClientSecret: "YOUR_CLIENT_SECRET",
-		Scopes:       []string{"scope1", "scope2"},
-		Endpoint: oauth2.Endpoint{
-			AuthURL:  "https://provider.com/o/oauth2/auth",
-			TokenURL: "https://provider.com/o/oauth2/token",
-		},
+		ClientID:     config.ClientConfig.ClientID,
+		ClientSecret: config.ClientConfig.ClientSecret,
+		Scopes:       config.ClientConfig.Scopes,
+		RedirectURL:  config.ClientConfig.RedirectURL,
+		Endpoint:     config.ClientConfig.Endpoint,
 	}
 
 }
 
-func oauthHandler(w http.ResponseWriter, r *http.Request) {
+func AuthCodeHandler(w http.ResponseWriter, r *http.Request) {
 	url := conf.AuthCodeURL("state", oauth2.AccessTypeOnline)
 	fmt.Printf("Visit the URL for the auth dialog: %v", url)
+	http.Redirect(w, r, url, http.StatusMovedPermanently)
+}
+
+func AuthCodeCallbackHandler(w http.ResponseWriter, r *http.Request) {
+	r.URL.Query()
+
 	var code string
-	if _, err := fmt.Scan(&code); err != nil {
-		log.Fatal(err)
-	}
 	tok, err := conf.Exchange(ctx, code)
 	if err != nil {
 		log.Fatal(err)
@@ -56,7 +63,8 @@ func oauthHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/", oauthHandler)
+	http.HandleFunc("/", AuthCodeHandler)
+	http.HandleFunc("/callback", AuthCodeCallbackHandler)
 
 	log.Fatal(http.ListenAndServe("localhost:8080", nil))
 }
