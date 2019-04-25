@@ -41,9 +41,8 @@ func AuthCodeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AuthCodeCallbackHandler(w http.ResponseWriter, r *http.Request) {
-	r.URL.Query()
+	code := r.URL.Query().Get("code")
 
-	var code string
 	tok, err := conf.Exchange(ctx, code)
 	if err != nil {
 		log.Fatal(err)
