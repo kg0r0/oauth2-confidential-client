@@ -9,7 +9,13 @@ import (
 const testJson = `{
 		"client_config": {
 			"client_id": "testclientid",
-			"client_secret": "testclientsecret"
+			"client_secret": "testclientsecret",
+			"endpoint": {
+				"auth_url": "https://provider.com/o/oauth2/auth",
+				"token_url": "https://provider.com/o/oauth2/token"
+			},
+			"redirect_uri": "https://example.com/callback",
+			"scopes": ["SCOPE1", "SCOPE2"]
 		}
 	}`
 
@@ -39,6 +45,36 @@ func TestUnmarshalConfig(t *testing.T) {
 			Test:     "test client_secret",
 			Result:   config.ClientConfig.ClientSecret,
 			Expected: "testclientsecret",
+		},
+		{
+			Test:     "test endpoint",
+			Result:   config.ClientConfig.ClientSecret,
+			Expected: "testclientsecret",
+		},
+		{
+			Test:     "test redirect_uri",
+			Result:   config.ClientConfig.RedirectURL,
+			Expected: "https://example.com/callback",
+		},
+		{
+			Test:     "test scope1",
+			Result:   config.ClientConfig.Scopes[0],
+			Expected: "SCOPE1",
+		},
+		{
+			Test:     "test scope2",
+			Result:   config.ClientConfig.Scopes[1],
+			Expected: "SCOPE2",
+		},
+		{
+			Test:     "test auth_url",
+			Result:   config.ClientConfig.Endpoint.AuthURL,
+			Expected: "https://provider.com/o/oauth2/auth",
+		},
+		{
+			Test:     "test token_url",
+			Result:   config.ClientConfig.Endpoint.TokenURL,
+			Expected: "https://provider.com/o/oauth2/token",
 		},
 	}
 

@@ -1,6 +1,12 @@
 {
   "client_config":{
     "client_id":"YOUR_CLIENT_ID",
-    "client_secret": "YOUR_CLIENT_SECRET"
+    "client_secret": "YOUR_CLIENT_SECRET",
+    "scopes": ["user"],
+    "endpoint": {
+      "auth_url": "https://github.com/login/oauth/authorize",
+      "token_url": "https://github.com/login/oauth/access_token"
+    },
+    "redirect_uri": "http://localhost:8080/callback"
   }
 }

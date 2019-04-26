@@ -3,8 +3,6 @@ package oauth2client
 import (
 	"encoding/json"
 	"io/ioutil"
-
-	"golang.org/x/oauth2"
 )
 
 // Config is ...
@@ -14,11 +12,17 @@ type Config struct {
 
 // ClientConfig is ...
 type ClientConfig struct {
-	ClientID     string          `json:"client_id"`
-	ClientSecret string          `json:"client_secret"`
-	Endpoint     oauth2.Endpoint `json:"endpoint"`
-	RedirectURL  string          `json:"redirect_uri"`
-	Scopes       []string        `json:"scopes"`
+	ClientID     string   `json:"client_id"`
+	ClientSecret string   `json:"client_secret"`
+	Endpoint     Endpoint `json:"endpoint"`
+	RedirectURL  string   `json:"redirect_uri"`
+	Scopes       []string `json:"scopes"`
+}
+
+// Endpoint is ...
+type Endpoint struct {
+	AuthURL  string `json:"auth_url"`
+	TokenURL string `json:"token_url"`
 }
 
 // NewConfig is ...

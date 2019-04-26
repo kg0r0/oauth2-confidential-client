@@ -24,12 +24,17 @@ func init() {
 		log.Fatal(err)
 	}
 
+	endpoint := oauth2.Endpoint{
+		AuthURL:  config.ClientConfig.Endpoint.AuthURL,
+		TokenURL: config.ClientConfig.Endpoint.TokenURL,
+	}
+
 	conf = &oauth2.Config{
 		ClientID:     config.ClientConfig.ClientID,
 		ClientSecret: config.ClientConfig.ClientSecret,
 		Scopes:       config.ClientConfig.Scopes,
 		RedirectURL:  config.ClientConfig.RedirectURL,
-		Endpoint:     config.ClientConfig.Endpoint,
+		Endpoint:     endpoint,
 	}
 
 }
