@@ -69,6 +69,5 @@ func AuthCodeCallbackHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/", AuthCodeHandler)
 	http.HandleFunc("/callback", AuthCodeCallbackHandler)
-
 	log.Fatal(http.ListenAndServe("localhost:8080", nil))
 }
