@@ -85,3 +85,25 @@ func TestUnmarshalConfig(t *testing.T) {
 	}
 
 }
+
+func TestInvalidFilePath(t *testing.T) {
+	tmpDir, _ := ioutil.TempDir("", "test")
+	defer os.RemoveAll(tmpDir)
+	ioutil.WriteFile(tmpDir+"/test_config.json", []byte(testJson), 0644)
+	testConfigFilePath := tmpDir + "/invalid_config.json"
+	config, err := NewConfig(testConfigFilePath)
+	if err == nil {
+		t.Errorf("test: TestInvalidFilePath, expected: nil, result:%v", config)
+	}
+}
+
+func TestInvalidFileContent(t *testing.T) {
+	tmpDir, _ := ioutil.TempDir("", "test")
+	defer os.RemoveAll(tmpDir)
+	ioutil.WriteFile(tmpDir+"/test_config.json", []byte(""), 0644)
+	testConfigFilePath := tmpDir + "/test_config.json"
+	config, err := NewConfig(testConfigFilePath)
+	if err == nil {
+		t.Errorf("test: TestInvalidFileContent, expected: nil, result:%v", config)
+	}
+}
